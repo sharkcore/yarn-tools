@@ -21,7 +21,7 @@ yarn global add yarn-tools
 ---
 ## list-duplicates
 
-### Descirption
+### Description
 Inspect a `yarn.lock` file looking for modules that can be de-duplicated. See `fix-duplicates` to automatically fix those duplicated packages.
 
 ### Command
@@ -43,7 +43,7 @@ Package "supports-color" wants ^3.1.2 and could get 3.2.3, but got 3.1.2
 
 ## fix-duplicates
 
-### Descirption
+### Description
 Fixes duplicates packages in a `yarn.lock` file.
 
 ### Command
