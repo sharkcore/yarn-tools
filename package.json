@@ -1,8 +1,8 @@
 {
-  "name": "yarn-tools",
+  "name": "@sharkcore/yarn-tools",
   "version": "0.2.0",
   "bin": "./index.js",
-  "description": "Assorted tools for yarn projects",
+  "description": "Collection of tools to work with yarn-based repositories.",
   "keywords": [
     "yarn",
     "yarn.lock",
@@ -13,13 +13,12 @@
   "scripts": {
       "test": "jest"
   },
-  "bugs": "https://bitbucket.org/atlassian/yarn-tools/issues",
+  "bugs": "https://github.com/sharkcore/yarn-tools/issues",
   "license": "Apache-2.0",
-  "author": "Sergio Cinos <scinos@atlassian.com>",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/atlassian/yarn-tools.git"
+    "url": "git+https://github.com/sharkcore/yarn-tools.git"
   },
   "engines": {
     "node": ">=8"
