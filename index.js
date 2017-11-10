@@ -7,35 +7,39 @@ const promisify = require('util').promisify;
 const listDuplicates = require('./modules/list-duplicates');
 const fixDuplicates = require('./modules/fix-duplicates');
 const readFile = promisify(fs.readFile);
+const writeFile = promisify(fs.writeFile);
 
 commander
-    .command('list-duplicates <file>')
+    .command('list-duplicates')
     .description('List duplicated packages in a yarn.lock file')
-    .action(async (file) => {
+    .action(async () => {
+        const lockfileName = 'yarn.lock';
+        let data;
         try {
-            const data = await readFile(file, 'utf8');
-            const lines = await listDuplicates(data);
-            lines.forEach(line => console.log(line));
-            process.exit(0);
+            data = await readFile(lockfileName, 'utf8');
         } catch(e) {
-            console.error(e);
+            console.error(`Unable to read ${lockfileName}!`);
             process.exit(1);
         }
+        const lines = await listDuplicates(data);
+        lines.forEach(line => console.log(line));
     });
 
 commander
-    .command('fix-duplicates <file>')
+    .command('fix-duplicates')
     .description('Fix duplicated packages in a yarn.lock file')
-    .action(async (file) => {
+    .action(async () => {
+        const lockfileName = 'yarn.lock';
+        let data;
         try {
-            const data = await readFile(file, 'utf8');
-            const fixedFile = await fixDuplicates(data);
-            console.log(fixedFile);
-            process.exit(0);
+            data = await readFile(lockfileName, 'utf8');
         } catch(e) {
-            console.error(e);
+            console.error(`Unable to read ${lockfileName}!`);
             process.exit(1);
         }
+        const fixedLockfile = await fixDuplicates(data);
+        await writeFile(lockfileName, fixedLockfile, 'utf8');
+        process.exit(0);
     });
 
 commander
