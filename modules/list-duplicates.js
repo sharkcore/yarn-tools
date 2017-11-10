@@ -2,8 +2,6 @@ const fs = require('fs')
 const lockfile = require('@yarnpkg/lockfile')
 const semver = require('semver');
 
-const FILE = '../jira-frontend/yarn.lock';
-
 module.exports = (data) => {
     const json = lockfile.parse(data).object;
 
