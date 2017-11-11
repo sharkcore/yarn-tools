@@ -25,7 +25,7 @@ yarn global add @sharkcore/yarn-tools
 Inspect a `yarn.lock` file looking for modules that can be de-duplicated. See `fix-duplicates` to automatically fix those duplicated packages.
 
 ### Command
-`list-duplicates
+`list-duplicates`
 
 ### Example
 
@@ -45,7 +45,7 @@ Package "supports-color" wants ^3.1.2 and got 3.1.2, but could use existing vers
 Fixes duplicates packages in a `yarn.lock` file.
 
 ### Command
-`fix-duplicates
+`fix-duplicates`
 
 ### Example
 
