@@ -13,15 +13,23 @@ commander
     .command('list-duplicates')
     .description('List duplicated packages in a yarn.lock file')
     .action(async () => {
-        const lockfileName = 'yarn.lock';
-        let data;
+        let packageJson;
         try {
-            data = await readFile(lockfileName, 'utf8');
+            packageJson = await readFile('package.json', 'utf8');
         } catch(e) {
-            console.error(`Unable to read ${lockfileName}!`);
+            console.error('Unable to read package.json!');
             process.exit(1);
         }
-        const lines = await listDuplicates(data);
+
+        let lockfile;
+        try {
+            lockfile = await readFile('yarn.lock', 'utf8');
+        } catch(e) {
+            console.error('Unable to read yarn.lock!');
+            process.exit(1);
+        }
+
+        const lines = await listDuplicates(packageJson, lockfile);
         lines.forEach(line => console.log(line));
     });
 
@@ -29,16 +37,24 @@ commander
     .command('fix-duplicates')
     .description('Fix duplicated packages in a yarn.lock file')
     .action(async () => {
-        const lockfileName = 'yarn.lock';
-        let data;
+        let packageJson;
         try {
-            data = await readFile(lockfileName, 'utf8');
+            packageJson = await readFile('package.json', 'utf8');
         } catch(e) {
-            console.error(`Unable to read ${lockfileName}!`);
+            console.error('Unable to read package.json!');
             process.exit(1);
         }
-        const fixedLockfile = await fixDuplicates(data);
-        await writeFile(lockfileName, fixedLockfile, 'utf8');
+
+        let lockfile;
+        try {
+            lockfile = await readFile('yarn.lock', 'utf8');
+        } catch(e) {
+            console.error(`Unable to read yarn.lock!`);
+            process.exit(1);
+        }
+
+        const fixedLockfile = await fixDuplicates(packageJson, lockfile);
+        await writeFile('yarn.lock', fixedLockfile, 'utf8');
         process.exit(0);
     });
 

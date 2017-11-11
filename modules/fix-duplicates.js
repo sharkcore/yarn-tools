@@ -2,9 +2,50 @@ const fs = require('fs')
 const lockfile = require('@yarnpkg/lockfile')
 const semver = require('semver');
 
+function garbageCollect(packageJson, lockfileJson) {
+    const minimalDeps = new Set();
+    const queue = [];
 
-module.exports = (data, dedupeCallback) => {
-    const json = lockfile.parse(data).object;
+    const topLevelDeps = Object.assign(
+        {},
+        packageJson.dependencies,
+        packageJson.devDependencies,
+    );
+    Object.entries(topLevelDeps).forEach(
+        ([name, requestedVersion]) => {
+            const key = `${name}@${requestedVersion}`;
+            queue.push(key);
+        }
+    );
+
+    // perform a BFS of dependencies, so we can delete the extraneous ones
+    while (queue.length > 0) {
+        const key = queue.shift();
+        if (minimalDeps.has(key)) {
+            continue;
+        }
+        minimalDeps.add(key);
+
+        Object.entries(lockfileJson[key].dependencies || {}).forEach(
+            ([name, requestedVersion]) => {
+                const depKey = `${name}@${requestedVersion}`;
+                queue.push(depKey);
+            }
+        );
+    }
+
+    const minimalLockfileJson = {};
+    for (const key of minimalDeps) {
+      minimalLockfileJson[key] = lockfileJson[key];
+    }
+
+    return minimalLockfileJson;
+}
+
+
+module.exports = (packageJsonData, lockfileData, dedupeCallback) => {
+    const packageJson = JSON.parse(packageJsonData);
+    const json = lockfile.parse(lockfileData).object;
 
     const packages={};
     const result = [];
@@ -68,6 +109,9 @@ module.exports = (data, dedupeCallback) => {
         }
     });
 
-    return lockfile.stringify(json);
+    // now that we've deduped, remove any extraneous deps
+    const minimalJson = garbageCollect(packageJson, json);
+
+    return lockfile.stringify(minimalJson);
 }
 
