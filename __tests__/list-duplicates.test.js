@@ -1,7 +1,7 @@
-const listDuplicates = require('../modules/list-duplicates');
-const lockfile = require('@yarnpkg/lockfile')
+const listDuplicates = require("../modules/list-duplicates");
+const lockfile = require("@yarnpkg/lockfile");
 
-test('lists duplicate and extraenous deps', () => {
+test("lists duplicate and extraenous deps", () => {
   const packageJsonData = `
   {
       "dependencies": {
@@ -37,7 +37,7 @@ baz@>=1.0.0:
   const result = listDuplicates(packageJsonData, lockfileData);
 
   expect(result).toEqual([
-      'Package "bar" wants >=1.0.0 and got 2.5.0, but could use existing version 3.0.1',
-      'Package "baz@>=1.0.0" is extraenous after deduplication, and could be removed.',
+    'Package "bar" wants >=1.0.0 and got 2.5.0, but could use existing version 3.0.1',
+    'Package "baz@>=1.0.0" is extraenous after deduplication, and could be removed.'
   ]);
 });

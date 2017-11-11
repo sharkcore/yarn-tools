@@ -1,7 +1,7 @@
-const fixDuplicates = require('../modules/fix-duplicates');
-const lockfile = require('@yarnpkg/lockfile')
+const fixDuplicates = require("../modules/fix-duplicates");
+const lockfile = require("@yarnpkg/lockfile");
 
-test('dedupes lockfile to max compatible version', () => {
+test("dedupes lockfile to max compatible version", () => {
   const packageJsonData = `
   {
       "dependencies": {
@@ -31,11 +31,11 @@ lodash@>=2.0.0:
   const deduped = fixDuplicates(packageJsonData, lockfileData);
   const json = lockfile.parse(deduped).object;
 
-  expect(json['lodash@>=1.0.0']['version']).toEqual('4.17.4');
-  expect(json['lodash@>=2.0.0']['version']).toEqual('4.17.4');
+  expect(json["lodash@>=1.0.0"]["version"]).toEqual("4.17.4");
+  expect(json["lodash@>=2.0.0"]["version"]).toEqual("4.17.4");
 });
 
-test('downgrades if lower compatible version is pinned', () => {
+test("downgrades if lower compatible version is pinned", () => {
   const packageJsonData = `
   {
       "dependencies": {
@@ -65,11 +65,11 @@ lodash@^3.0.0:
   const deduped = fixDuplicates(packageJsonData, lockfileData);
   const json = lockfile.parse(deduped).object;
 
-  expect(json['lodash@>=1.0.0']['version']).toEqual('3.10.1');
-  expect(json['lodash@^3.0.0']['version']).toEqual('3.10.1');
+  expect(json["lodash@>=1.0.0"]["version"]).toEqual("3.10.1");
+  expect(json["lodash@^3.0.0"]["version"]).toEqual("3.10.1");
 });
 
-test('removes extraneous dependencies after deduping', () => {
+test("removes extraneous dependencies after deduping", () => {
   const packageJsonData = `
   {
       "dependencies": {
@@ -105,7 +105,7 @@ baz@>=1.0.0:
   const deduped = fixDuplicates(packageJsonData, lockfileData);
   const json = lockfile.parse(deduped).object;
 
-  expect(json['bar@>=3.0.0']['version']).toEqual('3.0.1');
-  expect(json['bar@>=1.0.0']['version']).toEqual('3.0.1');
-  expect(json['baz@>=1.0.0']).toBeUndefined();
+  expect(json["bar@>=3.0.0"]["version"]).toEqual("3.0.1");
+  expect(json["bar@>=1.0.0"]["version"]).toEqual("3.0.1");
+  expect(json["baz@>=1.0.0"]).toBeUndefined();
 });
