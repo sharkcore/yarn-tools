@@ -2,7 +2,8 @@ const fs = require('fs')
 const lockfile = require('@yarnpkg/lockfile')
 const semver = require('semver');
 
-module.exports = (data) => {
+
+module.exports = (data, dedupeCallback) => {
     const json = lockfile.parse(data).object;
 
     const packages={};
@@ -35,7 +36,15 @@ module.exports = (data) => {
           // if all ranges can be satisfied by a single version, dedup to that
           const dedupedPackage = packages.find( p => p.pkg.version === singleVersion);
           packages.forEach(p => {
-              json[`${name}@${p.requestedVersion}`] = dedupedPackage.pkg;
+              const key = `${name}@${p.requestedVersion}`;
+              const newPkg = dedupedPackage.pkg;
+              const oldPkg = json[key];
+              if (newPkg !== oldPkg) {
+                  json[key] = newPkg;
+                  if (dedupeCallback) {
+                      dedupeCallback(name, p.requestedVersion, oldPkg, newPkg);
+                  }
+              }
           })
         } else {
           // otherwise dedupe each package to its maxSatisfying version
@@ -44,7 +53,16 @@ module.exports = (data) => {
               if (targetVersion === null) return;
               if (targetVersion !== p.pkg.version) {
                   const dedupedPackage = packages.find( p => p.pkg.version === targetVersion);
-                  json[`${name}@${p.requestedVersion}`] = dedupedPackage.pkg;
+
+                  const key = `${name}@${p.requestedVersion}`;
+                  const newPkg = dedupedPackage.pkg;
+                  const oldPkg = json[key];
+                  if (newPkg !== oldPkg) {
+                      json[key] = newPkg;
+                      if (dedupeCallback) {
+                          dedupeCallback(name, p.requestedVersion, oldPkg, newPkg);
+                      }
+                  }
               }
           })
         }
