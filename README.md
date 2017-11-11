@@ -25,18 +25,16 @@ yarn global add @sharkcore/yarn-tools
 Inspect a `yarn.lock` file looking for modules that can be de-duplicated. See `fix-duplicates` to automatically fix those duplicated packages.
 
 ### Command
-`list-duplicates <yarn.lock file>`
-
-* `<yarn.lock file>`: path to yarn.lock file, relative to index.js
+`list-duplicates
 
 ### Example
 
 ```
- └▸ yarn-tools list-duplicates my-project/yarn.lock
+ └▸ yarn-tools list-duplicates
 
-Package "supports-color" wants ^3.1.0 and could get 3.2.3, but got 3.1.2
-Package "supports-color" wants ^3.1.1 and could get 3.2.3, but got 3.1.2
-Package "supports-color" wants ^3.1.2 and could get 3.2.3, but got 3.1.2
+Package "supports-color" wants ^3.1.0 and got 3.1.2, but could use existing version 3.2.3
+Package "supports-color" wants ^3.1.1 and got 3.1.2, but could use existing version 3.2.3
+Package "supports-color" wants ^3.1.2 and got 3.1.2, but could use existing version 3.2.3
 ```
 
 ---
@@ -47,14 +45,12 @@ Package "supports-color" wants ^3.1.2 and could get 3.2.3, but got 3.1.2
 Fixes duplicates packages in a `yarn.lock` file.
 
 ### Command
-`fix-duplicates <yarn.lock file>`
-
-* `<yarn.lock file>`: path to yarn.lock file, relative to index.js
+`fix-duplicates
 
 ### Example
 
 ```
- └▸ yarn-tools fix-duplicates my-project/yarn.lock > fixed-yarn.lock
+ └▸ yarn-tools fix-duplicates
 ```
 
 # License
