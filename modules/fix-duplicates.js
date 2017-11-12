@@ -9,7 +9,8 @@ function garbageCollect(packageJson, lockfileJson) {
   const topLevelDeps = Object.assign(
     {},
     packageJson.dependencies,
-    packageJson.devDependencies
+    packageJson.devDependencies,
+    packageJson.optionalDependencies
   );
   Object.entries(topLevelDeps).forEach(([name, requestedVersion]) => {
     const key = `${name}@${requestedVersion}`;
@@ -24,12 +25,16 @@ function garbageCollect(packageJson, lockfileJson) {
     }
     minimalDeps.add(key);
 
-    Object.entries(lockfileJson[key].dependencies || {}).forEach(
-      ([name, requestedVersion]) => {
-        const depKey = `${name}@${requestedVersion}`;
-        queue.push(depKey);
-      }
+    const transitiveDeps = Object.assign(
+      {},
+      lockfileJson[key].dependencies,
+      lockfileJson[key].optionalDependencies
     );
+
+    Object.entries(transitiveDeps).forEach(([name, requestedVersion]) => {
+      const depKey = `${name}@${requestedVersion}`;
+      queue.push(depKey);
+    });
   }
 
   const minimalLockfileJson = {};
