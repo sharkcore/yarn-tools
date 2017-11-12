@@ -1,21 +1,15 @@
 {
   "name": "@sharkcore/yarn-tools",
   "version": "0.2.0",
-  "bin": "./index.js",
+  "bin": "./src/index.js",
   "description": "Collection of tools to work with yarn-based repositories.",
-  "keywords": [
-    "yarn",
-    "yarn.lock",
-    "lockfile",
-    "duplicated",
-    "package manager"
-  ],
   "scripts": {
-      "test": "jest"
+    "precommit": "yarn run lint",
+    "test": "yarn run lint && yarn run jest",
+    "lint": "eslint --fix src __tests__"
   },
-  "bugs": "https://github.com/sharkcore/yarn-tools/issues",
   "license": "Apache-2.0",
-  "main": "index.js",
+  "main": "./src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sharkcore/yarn-tools.git"
@@ -28,8 +22,11 @@
     "commander": "^2.10.0",
     "semver": "^5.3.0"
   },
-  "preferGlobal": true,
   "devDependencies": {
+    "@sharkcore/eslint-config": "^1.0.0",
+    "eslint": "^4.11.0",
+    "eslint-plugin-jest": "^21.3.2",
+    "husky": "^0.14.3",
     "jest": "^21.2.1"
   }
 }
