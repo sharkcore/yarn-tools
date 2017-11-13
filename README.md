@@ -1,4 +1,5 @@
 # Yarn tools
+[![npm (scoped)](https://img.shields.io/npm/v/@sharkcore/yarn-tools.svg)](https://yarn.pm/@sharkcore/yarn-tools) [![Build Status](https://travis-ci.org/sharkcore/yarn-tools.svg?branch=master)](https://travis-ci.org/sharkcore/yarn-tools)
 
 Collection of tools to work with yarn-based repositories.
 
