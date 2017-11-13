@@ -1,6 +1,6 @@
 {
   "name": "@sharkcore/yarn-tools",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "bin": "./src/index.js",
   "description": "Collection of tools to work with yarn-based repositories.",
   "scripts": {
