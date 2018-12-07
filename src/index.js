@@ -7,8 +7,12 @@ const { promisify } = require('util');
 const listDuplicates = require('./list-duplicates');
 const fixDuplicates = require('./fix-duplicates');
 
+const { version } = require('../package.json');
+
 const readFile = promisify(fs.readFile);
 const writeFile = promisify(fs.writeFile);
+
+commander.version(version);
 
 commander
     .command('list-duplicates')
